@@ -1,0 +1,18 @@
+# Compilation (générés par make)
+build/
+output/
+*.o
+*.d
+*.out
+*.exe
+
+# Débogage
+core
+*.dSYM/
+vgcore.*
+
+# Éditeurs et système
+.vscode/
+.idea/
+*.swp
+.DS_Store
