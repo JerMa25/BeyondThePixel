@@ -64,11 +64,48 @@ Prérequis : `gcc`, `make`.
 - Une branche par fonctionnalité (`feature/<module>`), fusion dans `main` via pull request relue par un autre membre.
 - On ne commit jamais `build/` ni `output/`.
 
-## Équipe
+## Type des pixels et gestion de la mémoire
 
-| Membre | Modules |
-|--------|---------|
-|        |         |
+Les pixels sont stockés dans le type `pixel_t`, défini comme `uint16_t` (entier non signé sur 16 bits).
+
+### Pourquoi `uint16_t` plutôt que `int` ?
+
+Une image est un grand tableau de pixels. Un `int` occupe généralement 4 octets, un `uint16_t` en occupe 2. Pour une image de 1024 x 1024 :
+
+| Type | Mémoire |
+|------|---------|
+| `int` | 4 Mo |
+| `uint16_t` | 2 Mo |
+
+Ce choix a aussi deux avantages :
+- Il exprime le domaine de valeurs : un pixel est dans `[0, 2^K - 1]`, donc jamais négatif.
+- Sa taille est identique sur toutes les plateformes, contrairement à `int`.
+
+Il couvre `K` de 1 à 16 bits. En mémoire, chaque pixel occupe toujours 16 bits, quelle que soit la valeur de `K`.
+
+### Attention : dépassement avec un type non signé
+
+Avec un type non signé, une soustraction négative ne donne pas un nombre négatif, elle « boucle » :
+
+```c
+pixel_t a = 10, b = 20;
+pixel_t r = a - b;   // r = 65526, et non -10 !
+```
+
+Même chose pour l'addition, qui peut dépasser `2^K - 1` sans prévenir.
+
+### Convention : calculer en `int`, puis reconvertir
+
+On ne manipule pas directement les `pixel_t` dans les calculs. Pour toute opération pouvant sortir de l'intervalle `[0, 2^K - 1]` (addition, soustraction, multiplication, étirement de contraste, convolution, etc.) :
+
+1. Lire le pixel et le convertir en `int`.
+2. Effectuer le calcul en `int`.
+3. Ramener le résultat dans `[0, 2^K - 1]`, comme le fait le cours (`Min(f+g, 255)`, `Max(f-g, 0)`).
+4. Reconvertir en `pixel_t` et écrire le résultat avec `image_set`.
+
+```
+
+`image_set` vérifie par un `assert` que la valeur écrite est dans `[0, 2^K - 1]`. Une valeur hors plage fait donc planter le programme en mode debug au lieu de corrompre l'image. Pour que ce filet fonctionne, on ne compile **pas** avec `-DNDEBUG` pendant le développement.
 
 ## Références
 
