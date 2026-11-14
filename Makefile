@@ -25,7 +25,7 @@ build/tests/%: tests/%.c $(OBJ)
 test: $(TEST_BIN)
 	@for t in $(TEST_BIN); do echo "== $$t"; ./$$t || exit 1; done
 
-# lance un seul test : make run-contrast
+# lance un seul test : make run-contrast_transformation
 run-%: build/tests/test_%
 	./$<
 

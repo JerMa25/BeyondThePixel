@@ -24,7 +24,7 @@ Définie dans `src/image.h`, elle est implémentée dans `src/image.c`
 |---------|---------|
 | `src/IO` | lecture et écriture de fichiers PGM |
 | `src/Histogram` | histogramme, luminance, profil d'intensité |
-| `src/Contrast` | contraste, étirement linéaire, saturation, par morceaux, gamma, LUT |
+| `src/Contrast` | linéaire, saturation, par morceaux, gamma (LUT) ; à venir : luminance, contraste, égalisation ([détails](src/Contrast/README.md)) |
 | `src/ImgOperations/LogicOperations` | ET, OU, XOR, NON |
 | `src/ImgOperations/MathOperations` | addition, soustraction, multiplication |
 | `src/Interpolation` | plus proche voisin, bilinéaire, bicubique |
@@ -48,11 +48,51 @@ BeyondThePixel/
 ```
 make              # compile tous les modules
 make test         # compile et lance tous les tests
-make run-contrast # lance uniquement tests/test_contrast.c
+make run-contrast_transformation  # lance uniquement tests/test_contrast_transformation.c
 make clean        # supprime build/ et output/
 ```
 
 Prérequis : `gcc`, `make`.
+
+## Comment tester
+
+Depuis la racine du projet :
+
+```
+make test
+```
+
+Résultat attendu, un `OK` par fichier de test :
+
+```
+== build/tests/test_contrast_transformation
+test_contrast_transformation OK
+== build/tests/test_image
+test_image OK
+```
+
+Pour un seul module : `make run-<nom>`, où `<nom>` est le nom du fichier `tests/test_<nom>.c`.
+Exemple : `make run-contrast_transformation`.
+
+**Si un test échoue**, le programme s'arrête sur un message qui donne le fichier, la ligne et la condition fausse :
+
+```
+test_contrast_transformation: tests/test_contrast_transformation.c:21: verifie: Assertion `image_get(img, 0, j) == attendu[j]' failed.
+```
+
+Il suffit d'ouvrir le test à cette ligne pour voir quelle valeur était attendue.
+
+**Vérifier la mémoire** (fuites, accès hors tableau, débordements), une fois par module :
+
+```
+gcc -Wall -Wextra -std=c11 -g -fsanitize=address,undefined -Isrc \
+    tests/test_contrast_transformation.c src/image.c src/Contrast/contrast.c -o /tmp/t -lm && /tmp/t
+```
+
+Si rien d'autre que `... OK` ne s'affiche, il n'y a aucun problème.
+
+**Ajouter un test** : créer `tests/test_<nom>.c` avec un `main` qui utilise `assert` sur des valeurs calculées à la main.
+Le Makefile le trouve automatiquement.
 
 ## Conventions de travail
 
@@ -102,8 +142,6 @@ On ne manipule pas directement les `pixel_t` dans les calculs. Pour toute opéra
 2. Effectuer le calcul en `int`.
 3. Ramener le résultat dans `[0, 2^K - 1]`, comme le fait le cours (`Min(f+g, 255)`, `Max(f-g, 0)`).
 4. Reconvertir en `pixel_t` et écrire le résultat avec `image_set`.
-
-```
 
 `image_set` vérifie par un `assert` que la valeur écrite est dans `[0, 2^K - 1]`. Une valeur hors plage fait donc planter le programme en mode debug au lieu de corrompre l'image. Pour que ce filet fonctionne, on ne compile **pas** avec `-DNDEBUG` pendant le développement.
 
