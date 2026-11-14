@@ -23,8 +23,9 @@ Définie dans `src/image.h`, elle est implémentée dans `src/image.c`
 | Dossier | Contenu |
 |---------|---------|
 | `src/IO` | lecture et écriture de fichiers PGM |
-| `src/Histogram` | histogramme, luminance, profil d'intensité |
-| `src/Contrast` | linéaire, saturation, par morceaux, gamma (LUT) ; à venir : luminance, contraste, égalisation ([détails](src/Contrast/README.md)) |
+| `src/Histogram` | histogramme, profil d'intensité |
+| `src/Contrast` | (contrast) luminance, calcul du contraste (écart type, min/max), (LUT) |
+| `src/Contrast` | (contrast_transformation) méthodes d'amélioration du contraste: égalisation de l'histogramme, transformations - linéaire, linéaire avec saturation, linéaire par morceaux, non-linéaire (gamma) |
 | `src/ImgOperations/LogicOperations` | ET, OU, XOR, NON |
 | `src/ImgOperations/MathOperations` | addition, soustraction, multiplication |
 | `src/Interpolation` | plus proche voisin, bilinéaire, bicubique |
