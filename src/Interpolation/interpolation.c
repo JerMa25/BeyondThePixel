@@ -111,7 +111,7 @@ double bicubic_weight(double x) {
     }
 }
 
-Image *interpolation_bicubique(const Image *img, int new_M, int new_N) {
+Image *interpolation_bicub(const Image *img, int new_M, int new_N) {
     /* Interpolation bicubique */
 
     if (img == NULL || new_M <= 0 || new_N <= 0)
