@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include "image.h"
-#include "Contrast/contrast.h"
+#include "Contrast/contrast_transformation.h"
 
 /* Crée une image d'une ligne contenant les valeurs données. */
 static Image *ligne(int K, const int *valeurs, int n) {
