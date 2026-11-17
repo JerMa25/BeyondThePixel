@@ -2,6 +2,7 @@
 #define HISTOGRAM_H
 
 #include "image.h"
+#include <stddef.h>
 
 /*
  * HISTOGRAMME
@@ -13,6 +14,21 @@
  * RÉF: (Cours 02, "Histogramme d'une image")
  */
 
-/* TODO : déclaration de la fonction ici */
 
+/*
+ * Calcule l'histogramme d'une image en niveaux de gris.
+ *
+ * Entrée : une image en niveaux de gris.
+ *
+ * Sortie : un tableau contenant le nombre de pixels
+ *          pour chaque niveau de gris.
+ *
+ * Taille du tableau : 2^K.
+ *
+ * Retourne NULL en cas d'erreur d'allocation ou d'image invalide.
+ *
+ * L'appelant doit libérer le tableau avec free().
+ */
+
+size_t *histogram_compute(const Image *img);
 #endif /* HISTOGRAM_H */
