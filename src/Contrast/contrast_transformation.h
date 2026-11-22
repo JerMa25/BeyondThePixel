@@ -4,17 +4,8 @@
 #include "image.h"
 
 /*
- * LUMINANCE
- * Entrée : une image.
- * Sortie : la luminance (brillance) de l'image, c'est-à-dire la moyenne
- *          de tous ses pixels.
- *
- * CONTRASTE (les deux définitions du cours)
- * Entrée : une image.
- * Sortie : la valeur du contraste.
- * Méthodes à implémenter :
- *   - l'écart-type des niveaux de gris ;
- *   - la variation entre niveaux de gris min et max.
+ * LUMINANCE ET CONTRASTE : voir Contrast/contrast.h
+ *   (contrast_luminance, contrast_stddev, contrast_range).
  *
  * AMÉLIORATION DU CONTRASTE
  * Entrée : une image, plus les paramètres propres à chaque méthode.
@@ -26,10 +17,10 @@
  *   - transformation non linéaire : correction gamma  (fait)
  *   - égalisation de l'histogramme
  *
- * RÉF: (Cours 02: "Luminance ou brillance d'une image", "Contraste d'une image", "Amélioration du contraste")
+ * RÉF: (Cours 02: "Amélioration du contraste")
  */
 
-/* TODO : luminance, contraste, égalisation de l'histogramme */
+/* TODO : égalisation de l'histogramme */
 
 /*
  * Notation : L-1 = image_max_level(img) = 2^K - 1 (255 pour K = 8).

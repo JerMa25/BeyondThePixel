@@ -66,10 +66,18 @@ make test
 Résultat attendu, un `OK` par fichier de test :
 
 ```
+== build/tests/test_contrast
+test_contrast OK
 == build/tests/test_contrast_transformation
 test_contrast_transformation OK
+== build/tests/test_histogram
+test_histogram OK
 == build/tests/test_image
 test_image OK
+== build/tests/test_interpolation
+test_interpolation OK
+== build/tests/test_mathOps
+test_mathOps OK
 ```
 
 Pour un seul module : `make run-<nom>`, où `<nom>` est le nom du fichier `tests/test_<nom>.c`.
@@ -87,8 +95,11 @@ Il suffit d'ouvrir le test à cette ligne pour voir quelle valeur était attendu
 
 ```
 gcc -Wall -Wextra -std=c11 -g -fsanitize=address,undefined -Isrc \
-    tests/test_contrast_transformation.c src/image.c src/Contrast/contrast.c -o /tmp/t -lm && /tmp/t
+    tests/test_contrast_transformation.c $(find src -name '*.c') -o /tmp/t -lm && /tmp/t
 ```
+
+Remplacer `test_contrast_transformation` par le test du module à vérifier. `$(find src -name '*.c')` ajoute
+tous les fichiers sources, comme le fait le Makefile : pas besoin de savoir de quels modules dépend le test.
 
 Si rien d'autre que `... OK` ne s'affiche, il n'y a aucun problème.
 
